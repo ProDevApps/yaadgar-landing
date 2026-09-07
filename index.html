@@ -1,3 +1,8 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Yaadgar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -349,8 +354,22 @@ footer{padding:64px 0 40px}
   .dest.big{grid-column:span 1}
   .foot-top{flex-direction:column; gap:32px}
 }
+/* phone in landscape: short viewport height, wider than portrait —
+   tighten vertical rhythm so the hero doesn't force excess scrolling */
+@media (max-height:500px) and (orientation:landscape){
+  .nav .wrap{height:60px}
+  .hero{padding:32px 0 40px}
+  .hero .wrap{grid-template-columns:1fr 1fr; gap:32px; align-items:start}
+  .hero h1{font-size:clamp(1.7rem,4.5vw,2.4rem); margin:12px 0 14px}
+  .hero p.lede{margin-bottom:18px}
+  .hero-ctas{margin-bottom:16px}
+  .chatcard{max-width:100%; padding:16px 14px 14px}
+  .sec{padding:56px 0}
+}
 </style>
 
+</head>
+<body>
 <nav class="nav">
   <div class="wrap">
     <div class="brand"><span class="badge ymark" style="width:34px;height:34px"></span> Yaadgar</div>
@@ -664,3 +683,6 @@ footer{padding:64px 0 40px}
   });
 })();
 </script>
+
+</body>
+</html>

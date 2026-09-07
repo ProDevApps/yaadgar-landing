@@ -174,7 +174,44 @@ section{position:relative}
 /* ---------- hero ---------- */
 .hero{padding:76px 0 88px; overflow:hidden}
 .hero .wrap{display:grid; grid-template-columns:1.05fr .95fr; gap:64px; align-items:center}
-.hero-route{position:absolute; inset:0; z-index:0; opacity:.55; pointer-events:none}
+.hero-route{position:absolute; inset:0; z-index:0; pointer-events:none}
+
+.stars{fill:var(--gold); opacity:0; animation:heroFadeIn .9s ease-out .1s forwards}
+.sun-glow{opacity:0; animation:heroFadeIn 1.3s ease-out .35s forwards}
+.sun-core{opacity:0; animation:sunCoreIn 1.3s ease-out .35s forwards}
+@keyframes heroFadeIn{to{opacity:.55}}
+@keyframes sunCoreIn{to{opacity:.6}}
+
+.ridge{opacity:0; transform:translateY(16px); transform-box:fill-box; transform-origin:center; animation:ridgeIn 1s cubic-bezier(.22,1,.36,1) forwards}
+.ridge-back{fill:var(--gold-deep); --ridge-op:.16; animation-delay:.5s}
+.ridge-mid{fill:var(--gold-deep); --ridge-op:.26; animation-delay:.68s}
+.ridge-front{fill:var(--bg-2,#100D0A); --ridge-op:.85; animation-delay:.86s}
+@keyframes ridgeIn{to{opacity:var(--ridge-op); transform:translateY(0)}}
+
+.bird-wrap{transform-box:fill-box}
+.bird{fill:none; stroke:var(--gold); stroke-width:1.3; stroke-linecap:round; opacity:.6;
+  transform-box:fill-box; transform-origin:center; animation:birdDrift 6.5s ease-in-out infinite}
+.bird2{animation-duration:7.4s; animation-delay:-2.1s}
+.bird3{animation-duration:5.7s; animation-delay:-3.6s}
+@keyframes birdDrift{0%,100%{transform:translate(0,0)} 50%{transform:translate(15px,-6px)}}
+
+@media (prefers-reduced-motion: reduce){
+  .stars, .sun-glow, .sun-core, .ridge-back, .ridge-mid, .ridge-front{animation:none !important; transform:none !important}
+  .stars{opacity:.55} .sun-glow{opacity:1} .sun-core{opacity:.6}
+  .ridge-back{opacity:.16} .ridge-mid{opacity:.26} .ridge-front{opacity:.62}
+  .bird{animation:none}
+}
+.wp-inner{
+  opacity:0; transform:scale(.3); transform-box:fill-box; transform-origin:center;
+  transition:opacity .55s cubic-bezier(.34,1.56,.64,1), transform .55s cubic-bezier(.34,1.56,.64,1);
+}
+.wp.lit .wp-inner{opacity:1; transform:scale(1)}
+.wp-ring{fill:none; stroke:var(--gold); stroke-width:1.4; opacity:.55}
+.wp-core{fill:var(--gold)}
+.wp-pulse{fill:none; stroke:var(--gold); stroke-width:1.2; opacity:0; transform-box:fill-box; transform-origin:center}
+.wp.arrived .wp-pulse{animation:wpPulse 1.4s ease-out 1}
+@keyframes wpPulse{0%{opacity:.6; transform:scale(.6)} 100%{opacity:0; transform:scale(2.6)}}
+@media (prefers-reduced-motion: reduce){ .wp-inner{transition:none} .wp.arrived .wp-pulse{animation:none} }
 .hero-copy{position:relative; z-index:1}
 .hero h1{
   font-size:clamp(2.5rem, 4.6vw, 3.7rem); line-height:1.06; margin:20px 0 22px; letter-spacing:-.015em;
@@ -331,16 +368,18 @@ section{position:relative}
 @media (max-width:600px){ .early-form-row{flex-direction:column} }
 
 /* ---------- footer ---------- */
-footer{padding:64px 0 40px}
-.foot-top{display:flex; justify-content:space-between; gap:48px; padding-bottom:48px; border-bottom:1px solid var(--hair); flex-wrap:wrap}
-.foot-brand{max-width:280px}
-.foot-brand .brand{margin-bottom:14px}
-.foot-brand p{color:var(--ink-faint); font-size:.88rem; font-family:'Fraunces',serif; font-style:italic}
-.foot-cols{display:flex; gap:64px; flex-wrap:wrap}
-.foot-col h4{font-size:.76rem; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-faint); margin-bottom:16px}
-.foot-col a{display:block; font-size:.9rem; color:var(--ink-soft); margin-bottom:11px; transition:color .2s}
+footer{padding:0 0 44px; position:relative}
+.foot-glow{height:1px; background:linear-gradient(90deg, transparent, var(--gold-deep) 22%, var(--gold) 50%, var(--gold-deep) 78%, transparent); opacity:.55}
+footer .wrap{padding-top:60px}
+.foot-top{display:flex; justify-content:space-between; gap:56px; padding-bottom:52px; flex-wrap:wrap}
+.foot-brand{max-width:300px}
+.foot-brand .brand{margin-bottom:16px}
+.foot-brand p{color:var(--ink-faint); font-size:.9rem; font-family:'Fraunces',serif; font-style:italic}
+.foot-cols{display:flex; gap:80px; flex-wrap:wrap}
+.foot-col h4{font-size:.76rem; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-faint); margin-bottom:18px}
+.foot-col a{display:block; font-size:.92rem; color:var(--ink-soft); margin-bottom:12px; transition:color .2s}
 .foot-col a:hover{color:var(--gold)}
-.foot-bottom{display:flex; justify-content:space-between; align-items:center; padding-top:26px; font-size:.8rem; color:var(--ink-faint); flex-wrap:wrap; gap:12px}
+.foot-bottom{display:flex; justify-content:space-between; align-items:center; padding-top:28px; border-top:1px solid var(--hair); font-size:.8rem; color:var(--ink-faint); flex-wrap:wrap; gap:12px}
 
 /* ---------- responsive ---------- */
 @media (max-width:920px){
@@ -392,9 +431,55 @@ footer{padding:64px 0 40px}
 
 <section class="hero">
   <svg class="hero-route" viewBox="0 0 1180 520" preserveAspectRatio="none" aria-hidden="true">
-    <path id="routePath" d="M -20 460 C 180 460 160 320 340 300 C 520 280 480 140 660 120 C 820 104 840 200 1010 160 C 1120 134 1140 90 1220 60"
-      fill="none" stroke="var(--gold-deep)" stroke-width="2" stroke-dasharray="6 10" opacity=".5"/>
-    <circle id="routeDot" r="5" fill="var(--gold)"/>
+    <defs>
+      <linearGradient id="routeGrad" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0" stop-color="var(--ember)"/>
+        <stop offset="1" stop-color="var(--gold)"/>
+      </linearGradient>
+      <radialGradient id="sunGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--gold)" stop-opacity=".95"/>
+        <stop offset="45%" stop-color="var(--gold)" stop-opacity=".32"/>
+        <stop offset="100%" stop-color="var(--gold)" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="routeGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="7" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="dotGlow" x="-200%" y="-200%" width="500%" height="500%">
+        <feGaussianBlur stdDeviation="4" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="softBlur" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3"/>
+      </filter>
+    </defs>
+
+    <g class="stars">
+      <circle cx="120" cy="60" r="1.3"/><circle cx="255" cy="35" r="1"/><circle cx="400" cy="80" r="1.4"/>
+      <circle cx="560" cy="30" r="1"/><circle cx="700" cy="55" r="1.2"/><circle cx="880" cy="28" r="1"/>
+      <circle cx="1010" cy="70" r="1.4"/><circle cx="1120" cy="40" r="1"/>
+    </g>
+
+    <circle class="sun-glow" cx="790" cy="300" r="160" fill="url(#sunGrad)"/>
+    <circle class="sun-core" cx="790" cy="300" r="30" fill="var(--gold)" filter="url(#softBlur)"/>
+
+    <g class="bird-wrap" transform="translate(300,110)"><path class="bird" d="M0 0 q6 -7 12 0 q6 -7 12 0"/></g>
+    <g class="bird-wrap" transform="translate(430,145)"><path class="bird bird2" d="M0 0 q5 -6 10 0 q5 -6 10 0"/></g>
+    <g class="bird-wrap" transform="translate(365,80)"><path class="bird bird3" d="M0 0 q5 -6 10 0 q5 -6 10 0"/></g>
+
+    <polygon class="ridge ridge-back" points="-20,520 -20,410 90,340 190,400 300,320 420,395 540,330 660,405 780,345 900,410 1020,335 1140,400 1200,420 1200,520"/>
+    <polygon class="ridge ridge-mid" points="-20,520 -20,450 120,380 260,440 380,360 520,435 660,375 800,445 940,370 1080,440 1200,460 1200,520"/>
+    <polygon class="ridge ridge-front" points="-20,520 -20,480 160,410 320,470 480,400 640,465 800,405 960,470 1120,415 1200,440 1200,520"/>
+
+    <path id="routeGlowPath" d="M 40 480 C 160 460 220 430 300 440 C 420 455 460 400 560 410 C 680 422 700 370 800 375 C 900 380 940 340 1040 330 C 1100 324 1140 300 1180 280"
+      fill="none" stroke="var(--gold)" stroke-width="5" opacity=".18" filter="url(#routeGlow)"/>
+    <path id="routePath" d="M 40 480 C 160 460 220 430 300 440 C 420 455 460 400 560 410 C 680 422 700 370 800 375 C 900 380 940 340 1040 330 C 1100 324 1140 300 1180 280"
+      fill="none" stroke="url(#routeGrad)" stroke-width="2.25" stroke-linecap="round" stroke-dasharray="6 9" opacity=".9"/>
+    <g id="wp1" class="wp"><g class="wp-inner"><circle class="wp-pulse" r="9"/><circle class="wp-ring" r="8"/><circle class="wp-core" r="3.4"/></g></g>
+    <g id="wp2" class="wp"><g class="wp-inner"><circle class="wp-pulse" r="9"/><circle class="wp-ring" r="8"/><circle class="wp-core" r="3.4"/></g></g>
+    <g id="wp3" class="wp"><g class="wp-inner"><circle class="wp-pulse" r="9"/><circle class="wp-ring" r="8"/><circle class="wp-core" r="3.4"/></g></g>
+    <g id="wp4" class="wp"><g class="wp-inner"><circle class="wp-pulse" r="9"/><circle class="wp-ring" r="8"/><circle class="wp-core" r="3.4"/></g></g>
+    <circle id="routeDot" r="5" fill="var(--gold)" filter="url(#dotGlow)"/>
   </svg>
   <div class="wrap">
     <div class="hero-copy">
@@ -615,10 +700,11 @@ footer{padding:64px 0 40px}
 </section>
 
 <footer>
+  <div class="foot-glow"></div>
   <div class="wrap">
     <div class="foot-top">
       <div class="foot-brand">
-        <div class="brand"><span class="badge ymark" style="width:42px;height:42px"></span> Yaadgar</div>
+        <div class="brand"><span class="badge ymark" style="width:46px;height:46px"></span> Yaadgar</div>
         <p>"har trip aik yaadgar" — every trip, a memory.</p>
       </div>
       <div class="foot-cols">
@@ -629,19 +715,14 @@ footer{padding:64px 0 40px}
           <a href="#why">Why Yaadgar</a>
         </div>
         <div class="foot-col">
-          <h4>Company</h4>
+          <h4>Get in touch</h4>
           <a href="#early">Early access</a>
           <a href="mailto:manzoor.akram@yaadgar.travel">manzoor.akram@yaadgar.travel</a>
-        </div>
-        <div class="foot-col">
-          <h4>Legal</h4>
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
         </div>
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© 2026 Yaadgar. Made in Pakistan.</span>
+      <span>© 2026 Yaadgar.</span>
       <span>Currently in private beta across the north.</span>
     </div>
   </div>
@@ -665,16 +746,28 @@ footer{padding:64px 0 40px}
   }
   runChat();
 
-  // route line draw + traveling dot
+  // route line draw + waypoint stops + traveling dot
   var path = document.getElementById('routePath');
+  var glowPath = document.getElementById('routeGlowPath');
   var dot = document.getElementById('routeDot');
+  var waypoints = ['wp1','wp2','wp3','wp4'].map(function(id){ return document.getElementById(id); });
+  var wpFracs = [0.12, 0.40, 0.68, 0.97];
   if(path && !reduced){
     var len = path.getTotalLength();
-    path.style.strokeDasharray = len;
-    path.style.strokeDashoffset = len;
-    path.style.transition = 'stroke-dashoffset 2.6s ease-out';
+    [path, glowPath].forEach(function(p){
+      p.style.strokeDasharray = len;
+      p.style.strokeDashoffset = len;
+      p.style.transition = 'stroke-dashoffset 2.6s ease-out';
+    });
     requestAnimationFrame(function(){
-      requestAnimationFrame(function(){ path.style.strokeDashoffset = 0; });
+      requestAnimationFrame(function(){
+        path.style.strokeDashoffset = 0;
+        glowPath.style.strokeDashoffset = 0;
+      });
+    });
+    waypoints.forEach(function(wp, i){
+      var p = path.getPointAtLength(wpFracs[i] * len);
+      wp.setAttribute('transform', 'translate(' + p.x + ',' + p.y + ')');
     });
     var start = null, duration = 2600;
     function animateDot(ts){
@@ -682,13 +775,28 @@ footer{padding:64px 0 40px}
       var t = Math.min((ts - start) / duration, 1);
       var p = path.getPointAtLength(t * len);
       dot.setAttribute('cx', p.x); dot.setAttribute('cy', p.y);
+      waypoints.forEach(function(wp, i){
+        if(t >= wpFracs[i] && !wp.classList.contains('lit')){
+          wp.classList.add('lit');
+          if(i === waypoints.length - 1){
+            setTimeout(function(){ wp.classList.add('arrived'); }, 550);
+          }
+        }
+      });
       if(t < 1) requestAnimationFrame(animateDot);
     }
     requestAnimationFrame(animateDot);
   } else if(path){
     path.style.strokeDasharray = 'none';
-    var p0 = path.getPointAtLength(path.getTotalLength());
+    if(glowPath) glowPath.style.strokeDasharray = 'none';
+    var totalLen = path.getTotalLength();
+    var p0 = path.getPointAtLength(totalLen);
     dot.setAttribute('cx', p0.x); dot.setAttribute('cy', p0.y);
+    waypoints.forEach(function(wp, i){
+      var p = path.getPointAtLength(wpFracs[i] * totalLen);
+      wp.setAttribute('transform', 'translate(' + p.x + ',' + p.y + ')');
+      wp.classList.add('lit');
+    });
   }
 
   // early-access form — posts to Web3Forms (web3forms.com) so submissions

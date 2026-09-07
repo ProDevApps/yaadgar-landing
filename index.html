@@ -145,7 +145,20 @@ section{position:relative}
 }
 .nav .wrap{display:flex; align-items:center; justify-content:space-between; height:76px; gap:24px}
 .brand{display:flex; align-items:center; gap:12px; font-family:'Fraunces',serif; font-weight:600; font-size:1.18rem}
+.nav-right{display:flex; align-items:center; gap:28px}
 .navlinks{display:flex; align-items:center; gap:32px; font-size:.92rem; color:var(--ink-soft)}
+.theme-toggle{
+  width:40px; height:40px; border-radius:50%; flex-shrink:0; display:grid; place-items:center; position:relative;
+  background:var(--surface); border:1px solid var(--hair-2); color:var(--gold); cursor:pointer;
+  transition:border-color .25s ease, box-shadow .25s ease, transform .18s ease;
+}
+.theme-toggle:hover{border-color:var(--gold-deep); box-shadow:var(--glow-gold); transform:translateY(-1px)}
+.theme-toggle svg{position:absolute; width:19px; height:19px; transition:opacity .4s ease, transform .5s cubic-bezier(.34,1.56,.64,1)}
+.theme-toggle .icon-moon{opacity:1; transform:rotate(0deg) scale(1)}
+.theme-toggle .icon-sun{opacity:0; transform:rotate(90deg) scale(.4)}
+:root[data-theme="light"] .theme-toggle .icon-moon{opacity:0; transform:rotate(-90deg) scale(.4)}
+:root[data-theme="light"] .theme-toggle .icon-sun{opacity:1; transform:rotate(0deg) scale(1)}
+@media (prefers-reduced-motion: reduce){ .theme-toggle svg{transition:opacity .2s} }
 .navlinks a{transition:color .2s}
 .navlinks a:hover{color:var(--ink)}
 .navlinks a:focus-visible, .btn:focus-visible, input:focus-visible{outline:2px solid var(--gold); outline-offset:3px}
@@ -420,12 +433,18 @@ footer .wrap{padding-top:60px}
 <nav class="nav">
   <div class="wrap">
     <div class="brand"><span class="badge ymark" style="width:48px;height:48px"></span> Yaadgar</div>
-    <div class="navlinks">
-      <a href="#how">How it works</a>
-      <a href="#destinations">Destinations</a>
-      <a href="#why">Why Yaadgar</a>
+    <div class="nav-right">
+      <div class="navlinks">
+        <a href="#how">How it works</a>
+        <a href="#destinations">Destinations</a>
+        <a href="#why">Why Yaadgar</a>
+      </div>
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2z"/></svg>
+      </button>
+      <a href="#early" class="btn btn-gold btn-sm">Get early access</a>
     </div>
-    <a href="#early" class="btn btn-gold btn-sm">Get early access</a>
   </div>
 </nav>
 
@@ -731,6 +750,32 @@ footer .wrap{padding-top:60px}
 <script>
 (function(){
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // theme toggle — light/dark, remembered per browser
+  (function(){
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    var STORE_KEY = 'yaadgar-theme';
+    var stored = null;
+    try { stored = localStorage.getItem(STORE_KEY); } catch(e){}
+    function systemPrefersLight(){
+      return window.matchMedia('(prefers-color-scheme: light)').matches;
+    }
+    function effectiveTheme(){
+      return (stored === 'light' || stored === 'dark') ? stored : (systemPrefersLight() ? 'light' : 'dark');
+    }
+    function apply(theme){
+      root.setAttribute('data-theme', theme);
+      btn.setAttribute('aria-label', theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
+    }
+    apply(effectiveTheme());
+    btn.addEventListener('click', function(){
+      var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      stored = next;
+      try { localStorage.setItem(STORE_KEY, next); } catch(e){}
+      apply(next);
+    });
+  })();
 
   // hero chat sequence
   var typing = document.getElementById('typingDots');
